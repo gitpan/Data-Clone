@@ -1,0 +1,34 @@
+---
+abstract: 'Polymorphic data cloning'
+author:
+  - 'Goro Fuji (gfx) <gfuji(at)cpan.org>'
+build_requires:
+  ExtUtils::MakeMaker: 6.42
+  ExtUtils::ParseXS: 2.21
+  Test::More: 0.88
+  Test::Requires: 0.03
+configure_requires:
+  Devel::PPPort: 3.19
+  ExtUtils::MakeMaker: 6.42
+distribution_type: module
+generated_by: 'Module::Install version 0.91'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+module_name: Data::Clone
+name: Data-Clone
+no_index:
+  directory:
+    - example
+    - inc
+    - t
+    - xt
+requires:
+  XSLoader: 0.1
+  parent: 0
+  perl: 5.8.1
+resources:
+  license: http://dev.perl.org/licenses/
+  repository: git://github.com/gfx/Perl-Data-Clone.git
+version: 0.001
