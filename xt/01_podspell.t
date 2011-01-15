@@ -19,3 +19,6 @@ Data::Clone
 gfx
 behaviour
 clonable
+CPAN
+Exportable
+

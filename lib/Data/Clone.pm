@@ -3,14 +3,20 @@ package Data::Clone;
 use 5.008_001;
 use strict;
 
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 
 use XSLoader;
 XSLoader::load(__PACKAGE__, $VERSION);
 
 use parent qw(Exporter);
 our @EXPORT    = qw(clone);
-our @EXPORT_OK = qw(data_clone);
+our @EXPORT_OK = qw(data_clone TIECLONE);
+
+sub data_clone;
+*data_clone = \&clone; # alias
+
+sub TIECLONE;
+*TIECLONE = \&clone; # alias
 
 1;
 __END__
@@ -21,7 +27,7 @@ Data::Clone - Polymorphic data cloning
 
 =head1 VERSION
 
-This document describes Data::Clone version 0.001.
+This document describes Data::Clone version 0.002.
 
 =head1 SYNOPSIS
 
@@ -64,21 +70,36 @@ calls a C<clone> method of the object if the object has a C<clone>, otherwise
 it makes a surface copy of the object. That is, this module does polymorphic
 data cloning.
 
+Although there are several modules on CPAN which can clone data,
+this module has a different cloning policy from almost all of them.
+See L</Cloning policy> and L</Comparison to other cloning modules> for
+details.
+
 =head2 Cloning policy
+
+A cloning policy is a rule that how a cloning routine copies data. Here is
+the cloning policy of C<Data::Clone>.
+
+=head3 Non-reference values
+
+Non-reference values are copied normally, which will drop their magics.
 
 =head3 Scalar references
 
-Scalar references are B<not> copied deeply. They are copied on surface
-because it is typically used to refer to something special, namely
+Scalar references including references to other types of references
+are B<not> copied deeply. They are copied on surface
+because it is typically used to refer to something unique, namely
 global variables or magical variables.
 
 =head3 Array references
 
-Array references are copied deeply.
+Array references are copied deeply. The cloning policy is applied to each
+value recursively.
 
 =head3 Hash references
 
-Hash references are copied deeply.
+Hash references are copied deeply. The cloning policy is applied to each
+value recursively.
 
 =head3 Glob, IO and Code references
 
@@ -87,9 +108,9 @@ These references are B<not> copied deeply. They are copied on surface.
 =head3 Blessed references (objects)
 
 Blessed references are B<not> copied deeply by default, because objects might
-have external resource which C<Data::Clone> could not know. They will be copied
-deeply only if Data::Clone knows they are clonable, i.e. they have a C<clone>
-method.
+have external resources which C<Data::Clone> could not deal with.
+They will be copied deeply only if C<Data::Clone> knows they are clonable,
+i.e. they have a C<clone> method.
 
 If you want to make an object clonable, you can use the C<clone()> function
 as a method:
@@ -98,6 +119,7 @@ as a method:
     use Data::Clone;
 
     # ...
+    my $your_class = Your::Class->new();
 
     my $c = clone($your_object); # $your_object->clone() will be called
 
@@ -114,14 +136,14 @@ Or you can import C<data_clone()> function to define your custom clone method:
     }
 
 Of course, you can use C<Clone::clone()>, C<Storable::dclone()>, and/or
-anything you want.
+anything you want as an implementation of C<clone> methods.
 
 =head2 Comparison to other cloning modules
 
 There are modules which does data cloning.
 
 C<Storable> is a standard module which can clone data with C<dclone()>.
-It has different cloning policy from C<Data::Clone>. By default it tries
+It has a different cloning policy from C<Data::Clone>. By default it tries
 to make a deep copy of all the data including blessed references, but you
 can change its behaviour with specific hook methods.
 
@@ -149,6 +171,10 @@ Returns a copy of I<Scalar>.
 Returns a copy of I<Scalar>.
 
 The same as C<clone()>. Provided for custom clone methods.
+
+=head3 B<< is_cloning() >>
+
+Returns true inside the C<clone()> function, false otherwise.
 
 =head1 DEPENDENCIES
 

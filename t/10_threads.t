@@ -1,8 +1,8 @@
 #!perl -w
 
 use strict;
-BEGIN{ eval { require threads } }
-use Test::Requires qw(threads);
+use constant HAS_THREADS => eval{ require threads };
+use if !HAS_THREADS, 'Test::More', skip_all => 'This test requires threads';
 use Test::More;
 
 use warnings FATAL => 'all';
@@ -53,7 +53,10 @@ for(1 .. 3){
         usleep 10;;
 
         my $o = MyNoclonable->new(foo => 10);
-        my $c = clone($o);
+        my $c = do{
+            local $Data::Clone::ObjectCallback = sub{ $_[0] };
+            clone($o);
+        };
 
         is $c, $o, "tid - " . threads->tid;
         $c->{foo}++;
