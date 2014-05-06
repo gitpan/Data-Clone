@@ -28,6 +28,7 @@ t/03_scalar_ref.t
 t/04_tree.t
 t/05_super.t
 t/06_tie.t
+t/07_stack.t
 t/10_threads.t
 t/11_leaktrace.t
 xshelper.h

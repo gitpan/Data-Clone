@@ -4,15 +4,16 @@ author:
   - 'Goro Fuji (gfx) <gfuji(at)cpan.org>'
 build_requires:
   Devel::PPPort: 3.19
-  ExtUtils::MakeMaker: 6.42
-  ExtUtils::ParseXS: 2.21
+  ExtUtils::MakeMaker: 6.59
   Test::More: 0.88
   Test::Requires: 0.03
 configure_requires:
   Devel::PPPort: 3.19
-  ExtUtils::MakeMaker: 6.42
+  ExtUtils::MakeMaker: 6.59
+  ExtUtils::ParseXS: 3.18
 distribution_type: module
-generated_by: 'Module::Install version 1.00'
+dynamic_config: 1
+generated_by: 'Module::Install version 1.06'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -26,10 +27,10 @@ no_index:
     - t
     - xt
 requires:
-  XSLoader: 0.1
+  XSLoader: 0.02
   parent: 0
   perl: 5.8.1
 resources:
   license: http://dev.perl.org/licenses/
-  repository: git://github.com/gfx/Perl-Data-Clone.git
-version: 0.003
+  repository: git://github.com/gfx/p5-Data-Clone.git
+version: 0.004
